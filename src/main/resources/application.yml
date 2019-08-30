@@ -10,10 +10,13 @@ spring:
     show-sql: true
     hibernate:
       ddl-auto: update
+  profiles:
+    include: shiro-white-list
 
 shiro:
-  enabled: true
   loginUrl: login.html
+  web:
+    enabled: true
 
 server:
   port: 8881

@@ -20,6 +20,6 @@ public class LoginController {
             e.printStackTrace();
             return "500.html";
         }
-        return "/index.html";
+        return "/home";
     }
 }
