@@ -1,14 +1,16 @@
 package com.jacky.learn.shiro.config;
 
-import org.apache.shiro.authc.AuthenticationException;
-import org.apache.shiro.authc.AuthenticationInfo;
-import org.apache.shiro.authc.AuthenticationToken;
+import org.apache.shiro.authc.*;
 import org.apache.shiro.authz.AuthorizationInfo;
 import org.apache.shiro.authz.SimpleAuthorizationInfo;
 import org.apache.shiro.realm.AuthorizingRealm;
 import org.apache.shiro.subject.PrincipalCollection;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class UserRealm extends AuthorizingRealm {
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(UserRealm.class);
 
     public UserRealm() {
         System.out.println("UserRealm:" + this);
@@ -22,6 +24,7 @@ public class UserRealm extends AuthorizingRealm {
     @Override
     protected AuthorizationInfo doGetAuthorizationInfo(PrincipalCollection principals) {
         AuthorizationInfo authorizationInfo = new SimpleAuthorizationInfo();
+        LOGGER.debug("doGetAuthorizationInfo");
         return authorizationInfo;
     }
 
@@ -33,6 +36,16 @@ public class UserRealm extends AuthorizingRealm {
      */
     @Override
     protected AuthenticationInfo doGetAuthenticationInfo(AuthenticationToken token) throws AuthenticationException {
-        return null;
+        String name = token.getPrincipal().toString();
+        String pwd = token.getCredentials().toString();
+        System.out.println(pwd);
+        String password = new String((char[]) token.getCredentials());
+        if (!"admin".equals(name) || !"admin".equals(password)) {
+            throw new UnknownAccountException();
+        }
+        String realmName = getName();
+        System.out.println("realmName:" + realmName);
+        SimpleAuthenticationInfo authenticationInfo = new SimpleAuthenticationInfo(name, password, realmName);
+        return authenticationInfo;
     }
 }

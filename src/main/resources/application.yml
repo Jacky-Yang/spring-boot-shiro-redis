@@ -12,6 +12,7 @@ spring:
       ddl-auto: update
 
 shiro:
+  enabled: true
   loginUrl: login.html
 
 server:
