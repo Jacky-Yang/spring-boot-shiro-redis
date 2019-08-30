@@ -13,4 +13,6 @@ spring:
 
 shiro:
   loginUrl: login.html
-  unauthorizedUrl:
+
+server:
+  port: 8881
