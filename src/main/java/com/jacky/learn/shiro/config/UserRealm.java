@@ -8,6 +8,8 @@ import org.apache.shiro.subject.PrincipalCollection;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.function.Consumer;
+
 public class UserRealm extends AuthorizingRealm {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(UserRealm.class);
@@ -43,5 +45,16 @@ public class UserRealm extends AuthorizingRealm {
         System.out.println("realmName:" + realmName);
         SimpleAuthenticationInfo authenticationInfo = new SimpleAuthenticationInfo(name, password, realmName);
         return authenticationInfo;
+    }
+
+    @Override
+    public void onLogout(PrincipalCollection principals) {
+        super.onLogout(principals);
+        principals.forEach(new Consumer() {
+            @Override
+            public void accept(Object o) {
+                System.out.println("principal:" + o);
+            }
+        });
     }
 }

@@ -1,5 +1,6 @@
 package com.jacky.learn.shiro.controller;
 
+import com.jacky.learn.shiro.entity.User;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.AuthenticationToken;
 import org.apache.shiro.authc.UsernamePasswordToken;
@@ -20,7 +21,10 @@ public class LoginController {
             final Subject subject = SecurityUtils.getSubject();
             subject.login(token);
 
-            subject.getSession().setAttribute("username", username);
+            User user = new User();
+            user.setUserName(username);
+
+            subject.getSession().setAttribute("user", user);
         } catch (Exception e) {
             e.printStackTrace();
             return "500.html";

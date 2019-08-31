@@ -1,13 +1,18 @@
 package com.jacky.learn.shiro.entity;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.util.Set;
 
 @Entity
 @Table(name = "TBL_USER")
-public class User extends BaseEntity {
+public class User extends BaseEntity implements Serializable {
+
+    private static final long serialVersionUID = 3149711943457347390L;
+
     private String userName;
     private String loginName;
+    private String password;
     private String sex;
 
     @ManyToMany
@@ -32,6 +37,14 @@ public class User extends BaseEntity {
 
     public void setLoginName(String loginName) {
         this.loginName = loginName;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    public String getPassword() {
+        return password;
     }
 
     public String getSex() {

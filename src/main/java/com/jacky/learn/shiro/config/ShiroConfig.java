@@ -11,17 +11,12 @@ import org.apache.shiro.web.session.mgt.DefaultWebSessionManager;
 import org.crazycake.shiro.RedisCacheManager;
 import org.crazycake.shiro.RedisManager;
 import org.crazycake.shiro.RedisSessionDAO;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 
 @Configuration
 public class ShiroConfig {
-
-    private static final Logger LOGGER = LoggerFactory.getLogger(ShiroConfig.class);
 
     private ShiroService shiroService;
 
@@ -30,7 +25,7 @@ public class ShiroConfig {
     }
 
     @Bean
-    protected ShiroFilterFactoryBean shiroFilterFactoryBean(@Qualifier("securityManager") SecurityManager securityManager) {
+    protected ShiroFilterFactoryBean shiroFilterFactoryBean(SecurityManager securityManager) {
         System.out.println("SecurityManager:" + securityManager);
         ShiroFilterFactoryBean filterFactoryBean = new ShiroFilterFactoryBean();
 
@@ -46,24 +41,28 @@ public class ShiroConfig {
      * SecurityManager 继承了SessionManager接口，但是具体实现委托给了具体的SessionManager的实现类
      * @return SecurityManager
      */
-    @Bean(name = {"authenticator", "securityManager"})
-    public SecurityManager securityManager(@Qualifier("authorizer") Realm realm) {
+    @Bean
+    public SecurityManager securityManager() {
         // 由于是Web项目，所以使用Web安全管理器，
         DefaultWebSecurityManager securityManager = new DefaultWebSecurityManager();
         System.out.println("securityManager:" + securityManager);
-        securityManager.setRealm(realm);
+        securityManager.setRealm(realm());
 
         securityManager.setCacheManager(cacheManager());
         securityManager.setSessionManager(sessionManager());
         return  securityManager;
     }
 
-    @Bean("authorizer")
+    @Bean
     public Realm realm() {
         System.out.println("authorizingRealm");
         return new UserRealm();
     }
 
+    /**
+     * 配置redis缓存管理器
+     * @return CacheManager
+     */
     @Bean
     protected CacheManager cacheManager() {
         RedisCacheManager cacheManager  = new RedisCacheManager();
@@ -80,6 +79,7 @@ public class ShiroConfig {
         return sessionManager;
     }
 
+    @Bean
     public SessionDAO redisSessionDAO() {
         RedisSessionDAO redisSessionDAO = new RedisSessionDAO();
         redisSessionDAO.setRedisManager(redisManager());
@@ -100,16 +100,4 @@ public class ShiroConfig {
 
         return redisManager;
     }
-
-
-
-    // temp code TODO delete
-//    @Bean
-//    public ShiroFilterChainDefinition shiroFilterChainDefinition() {
-//        LOGGER.info("shiroFilterChainDefinition");
-//        DefaultShiroFilterChainDefinition chainDefinition = new DefaultShiroFilterChainDefinition();
-////        final Map<String, String> filterChainDefinitions = shiroService.loadFilterChainDefinitions();
-////        chainDefinition.addPathDefinitions(filterChainDefinitions);
-//        return chainDefinition;
-//    }
 }
