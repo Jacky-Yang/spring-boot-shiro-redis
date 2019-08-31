@@ -3,5 +3,6 @@
 system:
   shiro:
     white-list:
-      -- /login.html
-      -- /login
+      - /
+      - /login.html
+      - /login

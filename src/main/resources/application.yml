@@ -12,6 +12,8 @@ spring:
       ddl-auto: update
   profiles:
     include: shiro-white-list
+  main:
+    allow-bean-definition-overriding: true
 
 shiro:
   loginUrl: login.html

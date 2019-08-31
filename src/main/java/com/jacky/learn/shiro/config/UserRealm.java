@@ -12,10 +12,6 @@ public class UserRealm extends AuthorizingRealm {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(UserRealm.class);
 
-    public UserRealm() {
-        System.out.println("UserRealm:" + this);
-    }
-
     /**
      *
      * @param principals
